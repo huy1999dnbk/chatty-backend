@@ -1,4 +1,4 @@
-import { IUserDocument } from '@user/interfaces/user.interface';
+import { IResetPasswordParams, IUserDocument } from '@user/interfaces/user.interface';
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
 import HTTP_STATUS from 'http-status-codes';
 import { Request, Response } from 'express';
@@ -9,6 +9,11 @@ import { authService } from '@service/db/auth.service';
 import { BadRequestError } from '@global/helpers/error-handler';
 import { loginSchema } from '@auth/schemes/signin';
 import { userService } from '@service/db/user.service';
+import { forgotPasswordTemplate } from '@service/emails/templates/forgot-password/forgot-password-template';
+import { emailQueue } from '@service/queues/email.queue';
+import moment from 'moment';
+import publicIP from 'ip';
+import { resetPasswordTemplate } from '@service/emails/templates/reset-password/reset-password-template';
 export class SignIn {
   @joiValidation(loginSchema)
   public async read(req: Request, res: Response): Promise<void> {
@@ -36,7 +41,18 @@ export class SignIn {
       },
       config.JWT_TOKEN!
     );
-
+    const templateParams: IResetPasswordParams = {
+      username: existingUser.username!,
+      email: existingUser.email!,
+      ipaddress: publicIP.address(),
+      date: moment().format('DD/MM/YYYY HH:mm'),
+    };
+    const template: string = resetPasswordTemplate.passwordResetConfirmationTemplate(templateParams);
+    emailQueue.addEmailJob('forgetPasswordEmail', {
+      template,
+      receiverEmail: 'delphine.ratke@ethereal.email',
+      subject: 'Password reset confirmation',
+    });
     req.session = { jwt: userJwt };
 
     const userDocument: IUserDocument = {
