@@ -27,6 +27,8 @@ const authSchema: Schema = new Schema(
       type: Date,
       default: Date.now(),
     },
+    passwordResetToken: { type: String, default: '' },
+    passwordResetExpires: { type: Number },
   },
   {
     toJSON: {

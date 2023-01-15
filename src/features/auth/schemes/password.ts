@@ -10,7 +10,7 @@ const emailSchema: ObjectSchema = Joi.object().keys({
 
 const passwordSchema: ObjectSchema = Joi.object().keys({
   password: Joi.string().required().min(4).max(8).messages({
-    'string.base': 'Username must be of type string',
+    'string.base': 'Password must be of type string',
     'string.min': 'Invalid password',
     'string.max': 'Invalid password',
     'string.empty': 'Password is a required field',

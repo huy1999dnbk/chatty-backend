@@ -10,8 +10,9 @@ import { ExpressAdapter } from '@bull-board/express';
 
 import { config } from '@root/config';
 import { IAuthJob } from '@auth/interfaces/auth.interface';
+import { IEmailJob } from '@user/interfaces/user.interface';
 
-type IBaseJobData = IAuthJob;
+type IBaseJobData = IAuthJob | IEmailJob;
 
 let bullAdapters: BullAdapter[] = [];
 
@@ -54,7 +55,7 @@ export abstract class BaseQueue {
       attempts: 3,
       backoff: {
         type: 'fixed',
-        delay: 5000,
+        delay: 2000,
       },
     });
   }

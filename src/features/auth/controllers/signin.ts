@@ -9,6 +9,8 @@ import { authService } from '@service/db/auth.service';
 import { BadRequestError } from '@global/helpers/error-handler';
 import { loginSchema } from '@auth/schemes/signin';
 import { userService } from '@service/db/user.service';
+
+
 export class SignIn {
   @joiValidation(loginSchema)
   public async read(req: Request, res: Response): Promise<void> {
@@ -36,6 +38,7 @@ export class SignIn {
       },
       config.JWT_TOKEN!
     );
+
 
     req.session = { jwt: userJwt };
 
