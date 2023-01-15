@@ -55,7 +55,7 @@ export abstract class BaseQueue {
       attempts: 3,
       backoff: {
         type: 'fixed',
-        delay: 5000,
+        delay: 2000,
       },
     });
   }

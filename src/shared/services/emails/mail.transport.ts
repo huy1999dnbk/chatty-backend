@@ -33,8 +33,8 @@ class MailTransport {
       port: 587,
       secure: false, // true for 465, false for other ports
       auth: {
-        user: config.SENDER_EMAIL!, // generated ethereal user
-        pass: config.SENDER_EMAIL_PASSWORD!, // generated ethereal password
+        user: config.SENDER_EMAIL, // generated ethereal user
+        pass: config.SENDER_EMAIL_PASSWORD, // generated ethereal password
       },
     });
 
@@ -46,6 +46,7 @@ class MailTransport {
     };
 
     try {
+
       await transporter.sendMail(mailOptions);
       log.info('Development email sent successfully');
     } catch (error) {
